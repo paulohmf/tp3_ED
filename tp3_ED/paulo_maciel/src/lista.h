@@ -3,11 +3,10 @@
 
 #include <cstdio> // em C substituir por #include <stdio.h>
 
-
 struct nodulo{
 	char *palavra;
 	int contador;
-	char* code;
+	char *code;
 	nodulo *proximoNodulo;//Apontador para o proximo nodulo da lista
 };
 
@@ -33,5 +32,4 @@ class listaEncadeada{
 		void insert(char *palavra);//DEPENDE DE PESQUISA() E EHVAZIA()
 
 };
-
 #endif

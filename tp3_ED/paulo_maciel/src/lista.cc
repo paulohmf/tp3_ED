@@ -31,22 +31,21 @@ bool listaEncadeada::ehVazia(){
 }
 //Percorre a lista inteira e imprime seu resultado
 void listaEncadeada::imprimeLista(){
-	nodulo *aux = this->cabeca->proximoNodulo;
 
 	//Caso a lista esteja vazia, imprime lista vazia
 	if(this->ehVazia()){
 		printf("(lista vazia)\n");
 	}else{
+		nodulo *aux = this->cabeca->proximoNodulo;
 		//Caso não seja vazia imprime os elementos no estipo "(posicao na lista) -> valor : valor"
 		int i=0;
 		while(aux->proximoNodulo != 0){
-			printf("%i : %s  CODE : %s\n",i,aux->contador,aux->palavra,aux->contador,aux->code);
+			printf("%i : %s/  CODE : %s\n",aux->contador,aux->palavra,aux->code);
 			aux = aux->proximoNodulo;
 			i++;
 		}
-		printf("%i : %s  CODE : %s\n",i,aux->contador,aux->palavra,aux->contador,aux->code);
+		printf("%i : %s/  CODE : %s\n",aux->contador,aux->palavra,aux->code);
 	}
-
 }
 //remove o primerio elemento da lista
 nodulo listaEncadeada::pop(){
@@ -76,7 +75,7 @@ void listaEncadeada::esvaziaLista(){
 	nodulo *NoduloAtual = this->cabeca->proximoNodulo;
 
 	if(this->ehVazia()){
-		printf("(lista ja é vazia)\n");
+		//printf("(delete - lista vazia)\n");
 	}else{
 		//Percorre a lista desalocando todos os nodulos da memoria
 		for(int i=0; i<=this->cabeca->contador;i++){
@@ -118,45 +117,41 @@ nodulo* listaEncadeada::pesquisa(char* palavra){
 
 //Adiciona um par de valores no final da lista, a função não aceita valores repetidos
 void listaEncadeada::insert(char *palavra){
-
 	nodulo *aux = this->pesquisa(palavra);
-
 	//Caso a palavra seja encontrada na lista
-	if(aux == this->cabeca){
+	if(aux != this->cabeca){
 		//o contador aumenta do nodulo com a palavra aumenta
 		aux->contador++;
 		return;
 	}
-
 	//SE NÃO FOI ENCONTRADO
 	//descobro o tamanho da palavra
-	int tamanhoPalavra = 0;
-	for(int i=0;palavra != '\0';i++){
+	int tamanhoPalavra = 1;
+	for(int i=0; palavra[i] != '\0';i++){
 		tamanhoPalavra++;
 	}
-
 	//aloca memoria para esse tamanho de palavra, evitar gastos desnecessários
 	char *novaPalavra = new char[tamanhoPalavra+1];
-
 	//copia a palavra recebida (que ocupa 63*tamanho de char na memoria) pro novo espaço alocado que usa o tamanho da palavra
-	for(int i=0;palavra != '\0';i++){
+	for(int i=0; i<tamanhoPalavra; i++){
 		novaPalavra[i] = palavra[i];
 	}
 
 	//aloca um novo nodulo
 	nodulo *novo = new nodulo;
-
 	//salva as informações no nodulo
 	novo->palavra = novaPalavra;
 	novo->contador = 1;
-
+	novo->code = 0;
 	//ADICIONA O NOVO NODULO NA PRIMEIRA POSIÇÃO DA LISTA
 	//caso a lista esteja vazia
 	if(this->ehVazia()){
+
 		this->cabeca->proximoNodulo = novo;
 		novo->proximoNodulo = 0;
 	//Caso exista algum elemento na lista
 	}else{
+
 		//O nodulo novo comeca a apontar pro antigo primeiro elemente (que se torna o segundo elemento)
 		novo->proximoNodulo = this->cabeca->proximoNodulo;
 		//E a cabeca começa a apontar para o novo nodulo

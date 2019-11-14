@@ -1,7 +1,21 @@
 #include <cstdio> // em C substituir por #include <stdio.h>
 #include "lista.h"
 
-int main() {
+struct myHashing{
+  int range = 25;
+  int chave = 97;
+  listaEncadeada *hashing[26];
+};
+
+int main(){
+  myHashing tabela;
+
+  //Incializa as listasa encadeadas da tabela Hashing
+  for(int i=0;i<=tabela.range;i++){
+    listaEncadeada *lista = new listaEncadeada();
+    tabela.hashing[i] = lista;
+  }
+
   long int numeroPalavras;
 
   scanf("%li ",&numeroPalavras);//OLHO NESSE SCANF
@@ -15,13 +29,27 @@ int main() {
     scanf("%c",&letra);
     if(letra == ' ' || letra == '\n'){
       palavra[posicao] = '\0';
-      printf("%li %s\n",palavrasAtualmente,palavra);//ADD PALAVRA NO HASHING
+
+      //Insere no hashing
+      int chave = int(palavra[0])%tabela.chave;
+      tabela.hashing[chave]->insert(palavra);
+
       posicao = 0;
       palavrasAtualmente++;
     }else{
       palavra[posicao] = letra;
       posicao++;
     }
+  }
+  //IMPRIME O HASHING
+  for(int i=0;i<=tabela.range;i++){
+    printf("%i---- \n",i);
+    tabela.hashing[i]->imprimeLista();
+  }
+
+  //Deleta as listasa encadeadas da tabela Hashing
+  for(int i=tabela.range;i>=0;i--){
+    delete tabela.hashing[i];
   }
 
   return 0;
