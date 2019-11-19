@@ -224,9 +224,11 @@ void huffman::gerarArvore(){
 	this->raiz = this->vetorNodulos[0];
 
 	//GERAR CODIGOS
+	/*
   	char code[0];
   	code[0] = '\0';
   	this->gerarCodigos(this->raiz,code);
+  	*/
 }
 
 void huffman::imprimeGerador(){
@@ -237,16 +239,19 @@ void huffman::imprimeGerador(){
 	}
 }
 
-void huffman::gerarCodigos(noduloArvore *nodulo,char *code){
-	if(nodulo != 0){
-		if(nodulo->folhas == 1){
-			nodulo->code = code;
-			printf("%i %i %s %s\n",nodulo->contador,nodulo->folhas,nodulo->palavra,nodulo->code);
-			/*;
-			int chave = int(nodulo->palavra[0])%tabela.chave;
-			listaEncadeada *noduloLista = tabela.myHashing[chave]->pesquisa(nodulo->palavra);
+void huffman::gerarCodigos(noduloArvore *nod,char *code,myHashing *tabela){
+	if(nod != 0){
+		if(nod->folhas == 1){
+			nod->code = code;
+			//rintf("%i %i %s %s\n",nod->contador,nod->folhas,nod->palavra,nod->code);
+
+			int chave = int(nod->palavra[0])%tabela->chave;
+			nodulo *noduloLista = tabela->hashing[chave]->pesquisa(nod->palavra);
+
+			//printf("%i %s %s\n",noduloLista->contador,noduloLista->palavra,noduloLista->code);
+
 			noduloLista->code = code;
-			*/
+			//printf("%i %s %s\n",noduloLista->contador,noduloLista->palavra,noduloLista->code);
 			return;
 		}
 		int tamanho = 0;
@@ -269,8 +274,8 @@ void huffman::gerarCodigos(noduloArvore *nodulo,char *code){
 		novoCodigoDir[tamanho] = '\0';
 		novoCodigoDir[tamanho-1] = '1';
 
-		gerarCodigos(nodulo->esq,novoCodigoEsq);
-		gerarCodigos(nodulo->dir,novoCodigoDir);
+		gerarCodigos(nod->esq,novoCodigoEsq,tabela);
+		gerarCodigos(nod->dir,novoCodigoDir,tabela);
 	}
 }
 /*

@@ -43,7 +43,7 @@ class huffman{
 		//###########
 		void gerarArvore();
 
-		void gerarCodigos(noduloArvore *no,char *code);
+		void gerarCodigos(noduloArvore *no,char *code,myHashing *tabela);
 
 
 		char* pesquisaCodigo(noduloArvore *no,char *palavra);

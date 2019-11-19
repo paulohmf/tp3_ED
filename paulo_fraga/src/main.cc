@@ -1,20 +1,15 @@
 #include <cstdio> // em C substituir por #include <stdio.h>
 #include "lista.h"
 #include "huffman.h"
-
-struct myHashing{
-  int range = 25;
-  int chave = 97;
-  listaEncadeada *hashing[26];
-};
+#include "hashing.h"
 
 int main(){
-  myHashing tabela;
+  myHashing *tabela = new myHashing;
 
   //Incializa as listasa encadeadas da tabela Hashing
-  for(int i=0;i<=tabela.range;i++){
+  for(int i=0;i<=tabela->range;i++){
     listaEncadeada *lista = new listaEncadeada();
-    tabela.hashing[i] = lista;
+    tabela->hashing[i] = lista;
   }
 
   //Recebe o tamanho da entrada
@@ -33,8 +28,8 @@ int main(){
       palavra[posicao] = '\0';
 
       //Insere a entrada no hashing
-      int chave = int(palavra[0])%tabela.chave;
-      tabela.hashing[chave]->insert(palavra);
+      int chave = int(palavra[0])%tabela->chave;
+      tabela->hashing[chave]->insert(palavra);
 
       posicao = 0;
       palavrasAtualmente++;
@@ -43,29 +38,30 @@ int main(){
       posicao++;
     }
   }
+  //printf("\nHashing gerado\n");
   //IMPRIME O HASHING
-  for(int i=0;i<=tabela.range;i++){
-    if(!tabela.hashing[i]->ehVazia()){
-      printf("%i---- \n",i);
-    }
-   tabela.hashing[i]->imprimeLista();
-  }
+  //for(int i=0;i<=tabela->range;i++){
+  //  if(!tabela->hashing[i]->ehVazia()){
+  //    printf("%i---- \n",i);
+  //  }
+  // tabela->hashing[i]->imprimeLista();
+  //}
 
   //inicio do huffmann
-  printf("\nHUFFMAN\n\n");
+  //printf("\nHUFFMAN\n\n");
   huffman *arvore = new huffman();
 
   //Carrega o vetor gerador da arvore de Huffman (a floresta de arvores unicas)
-  for(int i=0;i<=tabela.range;i++){
+  for(int i=0;i<=tabela->range;i++){
 
     //printf("vazio (%i): %i\n",i,tabela.hashing[i]->ehVazia());
-    if(!tabela.hashing[i]->ehVazia()){
+    if(!tabela->hashing[i]->ehVazia()){
 
-      int tamanhoLista = tabela.hashing[i]->size();
+      int tamanhoLista = tabela->hashing[i]->size();
      // printf("tamanhoLista %i\n",tamanhoLista);
       for(int x=0;x<=tamanhoLista;x++){
-        nodulo tirado = tabela.hashing[i]->pop();
-        tabela.hashing[i]->inserirNodulo(tirado);
+        nodulo tirado = tabela->hashing[i]->pop();
+        tabela->hashing[i]->inserirNodulo(tirado);
         //printf("tirado %s (%i)\n",tirado.palavra,tirado.contador);
 
         noduloArvore *novo = new noduloArvore;
@@ -90,20 +86,20 @@ int main(){
     }
     //tabela.hashing[i]->imprimeLista();
   }
-  printf("VETOR GERADOR PRONTO\n");
+  //printf("VETOR GERADOR PRONTO\n");
   //arvore->imprimeGerador();
 
   //Gera a arvore de Huffman
-  printf("GERADOR ARVORE COM OS CODIGOS\n");
+  //printf("GERADOR ARVORE COM OS CODIGOS\n");
   arvore->gerarArvore();
-  printf("ARVORE GERADA\n");
+  //printf("ARVORE GERADA\n");
 
-  /*
   //GERAR CODIGOS
+  //printf("GERAR CODIGOS\n");
   char code[0];
   code[0] = '\0';
-  this->gerarCodigos(this->raiz,code,tabela);
-  */
+  arvore->gerarCodigos(arvore->raiz,code,tabela);
+  //printf("CODIGOS GERADOS\n");
 
   /*ERRO POSSIVEL
   //SALVAR CODIGOS NO HASHING
@@ -126,33 +122,39 @@ int main(){
     }
   }
   */
-  /*
+  
   //IMPRIME O HASHING
-  for(int i=0;i<=tabela.range;i++){
-    if(!tabela.hashing[i]->ehVazia()){
-      printf("%i---- \n",i);
-    }
-   tabela.hashing[i]->imprimeLista();
-  }
-  */
-  /* ENTRADAS DO USUARIO
+  //for(int i=0;i<=tabela->range;i++){
+  //  if(!tabela->hashing[i]->ehVazia()){
+  //    printf("%i---- \n",i);
+  //  }
+  // tabela->hashing[i]->imprimeLista();
+  //}
+
+  //ENTRADAS DO USUARIO
   char op;
   while (scanf(" %c %s", &op, palavra) != EOF) {//voltar com o espaço antes de %c
     if (op == 'q'){
-      int chave = int(palavra[0])%tabela.chave;
+      int chave = int(palavra[0])%tabela->chave;
       nodulo *resposta;
-      resposta = tabela.hashing[chave]->pesquisa(palavra);
+      resposta = tabela->hashing[chave]->pesquisa(palavra);
       printf("%i\n",resposta->contador);
+    }
+    if (op == 'c'){
+      int chave = int(palavra[0])%tabela->chave;
+      nodulo *resposta;
+      resposta = tabela->hashing[chave]->pesquisa(palavra);
+      printf("%s\n",resposta->code);
     } 
   }
-  */
 
   //Deleta a arvore
   delete arvore;
   //Deleta as listas encadeadas da tabela Hashing
-  for(int i=tabela.range;i>=0;i--){
-    delete tabela.hashing[i];
+  for(int i=tabela->range;i>=0;i--){
+    delete tabela->hashing[i];
   }
+  delete tabela;
   return 0;
 
 }

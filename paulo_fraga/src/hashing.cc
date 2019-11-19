@@ -1,5 +1,4 @@
 #include "hashing.h"
-
 /*
 struct myHashing{
   int range = 25;
