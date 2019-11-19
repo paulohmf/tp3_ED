@@ -5,14 +5,6 @@
 #include "lista.h"
 #include "hashing.h"
 
-/* apenas para visualização
-struct nodulo{
-	char *palavra;
-	int contador;
-	char *code;
-	nodulo *proximoNodulo;
-};
-*/
 struct noduloArvore{
 	char *palavra;
 	int contador;
@@ -30,31 +22,17 @@ class huffman{
 	public:
 		noduloArvore *raiz;
 
+		//###########
 		huffman();
 		~huffman();
 
-		//bool ehVazia();
-		void esvaziaLista(){};
+		void esvaziaLista(){};//TO-DO
 
-		void inserirElemento(noduloArvore *nod);
-
-		void imprimeGerador();
-
-		//###########
-		void gerarArvore();
-
-		void gerarCodigos(noduloArvore *no,char *code,myHashing *tabela);
+		void inserirElemento(noduloArvore *nod);//Insere um elemento no vetor gerador
+		void imprimeGerador();//Imprime o vetor gerador
 
 
-		char* pesquisaCodigo(noduloArvore *no,char *palavra);
-		//nodulo pop();
-
-
-
-		//nodulo* pesquisa(char *palavra);//DEPENDE DE SIZE()
-
-
-
-
+		void gerarArvore();//Gera a arvore a partir do vetor de nodulos
+		void gerarCodigos(noduloArvore *no,char *code,myHashing *tabela);//Gera os codigos na arvores esalva em um hashing
 };
 #endif

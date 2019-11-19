@@ -18,12 +18,19 @@ huffman::~huffman(){
 	delete this->raiz;
 }
 
-//Essa funcao insere um nodulo NO --->VETOR GERADOR<---
+//Imprime todos os vetores presentes no vetor que sera usado para gerar a arvore
+void huffman::imprimeGerador(){
+	int tam = this->tamanhoVetor;
+	for(int i=0;i<=tam;i++){
+		printf("%i %i %s\n",this->vetorNodulos[i]->contador,this->vetorNodulos[i]->folhas,this->vetorNodulos[i]->palavra);
+	}
+}
+
+//Essa funcao insere um nodulo no --->VETOR GERADOR<---
+//Para realizar a insercao a funcao respeita a ordem de contadores, em seguida de folhas e por fim lexical
 void huffman::inserirElemento(noduloArvore *nod){
 	this->tamanhoVetor++;
 	int tam = this->tamanhoVetor;
-
-	//printf("%i this->tamanhoVetor++ \n",tam);
 
 	noduloArvore **nodulosAtualizados = new noduloArvore*[tam+5];
 
@@ -32,36 +39,30 @@ void huffman::inserirElemento(noduloArvore *nod){
 
 	//PERCORRE O VETOR ORIGINAL (tam -1) ATE ENCONTRAR A POSICAO
 	for(int i=0;i<=(tam-1);i++){
-		//printf("%i i\n",i);
-		//printf("%i nod->contador < %i this->vetorNodulos[i]->contador \n",nod->contador,this->vetorNodulos[i]->contador);
+
 		//Caso o contador seja maior do que o do nodulo, encontramos a posicao
 		if(nod->contador < this->vetorNodulos[i]->contador){
-			//printf("SIM %i i\n",i);
 			nodulosAtualizados[i] = nod;
 			posicao = i;
 			novoNoduloInserido = true;
 		}
-		//printf("%i nod->contador == %i this->vetorNodulos[i]->contador \n",nod->contador,this->vetorNodulos[i]->contador);
+
 		//caso o contador seja igual, temos que checar pela palavra
 		if(nod->contador == this->vetorNodulos[i]->contador){
-			//printf("SIM\n");
 
 			//se o contador for igual, primerio eu olho o numero de folhas
 			if(nod->folhas == this->vetorNodulos[i]->folhas){
 
-				//printf("%c nod->palavra[0] < %c this->vetorNodulos[i]->palavra[0] \n",nod->palavra[0], this->vetorNodulos[i]->palavra[0]);
 				//se a primeira letra da palavra for menor que a primeira letra comparada encontramos a posicao a posicao
 				if(nod->palavra[0] < this->vetorNodulos[i]->palavra[0]){
-					//printf("SIM %i i\n",i);
 					nodulosAtualizados[i] = nod;
 					posicao = i;
 					novoNoduloInserido = true;
 					break;
 				}
 				//se a primeira letra for igual, temos que pecorrer a palavra inteira para encontrar a posicao certa
-				//printf("%c nod->palavra[0] < %c this->vetorNodulos[i]->palavra[0] \n",nod->palavra[0], this->vetorNodulos[i]->palavra[0]);
 				if(nod->palavra[0] == this->vetorNodulos[i]->palavra[0]){
-					//printf("SIM\n");
+
 					//percorre a palavra inteira
 					int ultimaLetra;
 					for(int x=0;nod->palavra[x] != '\0' && this->vetorNodulos[i]->palavra[x] != '\0';x++){
@@ -74,7 +75,6 @@ void huffman::inserirElemento(noduloArvore *nod){
 						}
 						//se a letra for paior saimos do loop
 						if(nod->palavra[x] > this->vetorNodulos[i]->palavra[x]){
-							//SAI
 							break;
 						}
 						//se for igual continuamos comparando
@@ -88,6 +88,7 @@ void huffman::inserirElemento(noduloArvore *nod){
 					}
 				}
 			}
+			//se as folhas passarem as do vetor, encontrei a posicao
 			if(nod->folhas < this->vetorNodulos[i]->folhas){
 				nodulosAtualizados[i] = nod;
 				posicao = i;
@@ -98,43 +99,29 @@ void huffman::inserirElemento(noduloArvore *nod){
 		if(novoNoduloInserido){
 			break;
 		}
-		//caso o nodulo nao tenha encontrado sua posicao, o novo vetor e atualizado com o valor antigo
+		//caso o nodulo nao tenha encontrado sua posicao, o novo vetor e atualizado com o valor do antigo
 		nodulosAtualizados[i] = this->vetorNodulos[i];
 	}
 	//Caso todos os elementos tenham sido percorridos a posicao do nodulo eh no final do novo vetor
 	if(!novoNoduloInserido){
-		//printf("nodulo nao inserido\n");
-		//printf("%i tam\n",tam);
-		//printf("%s nod\n",nod->palavra);
 		nodulosAtualizados[tam] = nod;
 		posicao = tam;
 	}else{
 		//caso a posicao tenha sido encontrada
-		//printf("nodulo inserido\n");
-		//printf("%i posicao+1\n",posicao+1);
 		for(int i=posicao+1;i<=tam;i++){
+			//copia o restante dos nodulos no vetor atualizado
 			nodulosAtualizados[i] = this->vetorNodulos[i-1];
 		}
 	}
 
-	//imprime vetor aux
-	//printf("imprime nodulosAtualizados\n");
-	//for(int i=0;i<=tam;i++){
-	//printf("%i %s\n",nodulosAtualizados[i]->contador,nodulosAtualizados[i]->palavra);
-	//}
-	
+	//deleta o vetor antigo
 	if(this->vetorNodulos != 0){
 		delete this->vetorNodulos;
 	}
+	//salva o vetor novo
 	this->vetorNodulos = nodulosAtualizados;
-	
-	//imprime vetor de nodulos
-	//printf("imprime vetorNodulos\n");
-	//for(int i=0;i<=tam;i++){
-	//	printf("%i %s\n",this->vetorNodulos[i]->contador,this->vetorNodulos[i]->palavra);
-	//}
-
 }
+//Essa funcao meramente determina se a palavra 0 é menor que a palavra 1 (usada para gerar a arvore)
 int menorPalavra(char *palavra_0,char *palavra_1){
 	if(palavra_0[0] < palavra_1[0]){
 		return 0;
@@ -167,40 +154,25 @@ int menorPalavra(char *palavra_0,char *palavra_1){
 }
 
 void huffman::gerarArvore(){
-
 	int tamanho = this->tamanhoVetor;
 
-	//printf("%i this->tamanhoVetor++ \n",tamanho);
-
+	//Enquanto nao restar apenas um no raiz a construção da arvore segue
 	while(tamanho > 0){
+		//nova raiz e criada e os dois primeros noduloArvore do vetor gerador sao juntados
 		noduloArvore *novo = new noduloArvore;
-
-		//printf("%i %i %s - %x\n",this->vetorNodulos[0]->contador,this->vetorNodulos[0]->folhas,this->vetorNodulos[0]->palavra,this->vetorNodulos[0]);
-		//printf("%i %i %s - %x\n",this->vetorNodulos[1]->contador,this->vetorNodulos[1]->folhas,this->vetorNodulos[1]->palavra,this->vetorNodulos[1]);
-
 		novo->contador = this->vetorNodulos[0]->contador + this->vetorNodulos[1]->contador; 
 		novo->folhas = this->vetorNodulos[0]->folhas + this->vetorNodulos[1]->folhas;
-
-		//funcao determina a menor palavra
-		int menor = menorPalavra(this->vetorNodulos[0]->palavra,this->vetorNodulos[1]->palavra);
+		int menor = menorPalavra(this->vetorNodulos[0]->palavra,this->vetorNodulos[1]->palavra);//funcao determina a menor palavra
 		novo->palavra = this->vetorNodulos[menor]->palavra;
-
-
 		novo->esq = this->vetorNodulos[0];
 		novo->dir = this->vetorNodulos[1];
 
-		//printf("NOVO\n%i %i %s\n%x %x\n",novo->contador,novo->folhas,novo->palavra,novo->esq,novo->dir);
-
+		//o vetor de nodulos geradores é atualizado para remover os dois primerio elementos
 		noduloArvore **nodulosAtualizados = new noduloArvore*[tamanho];
 		for(int i=0;i<=tamanho-2;i++){
 			nodulosAtualizados[i] = this->vetorNodulos[i+2];
 		}
-		/*
-		printf("IMPRIMIR GERADOR POS REMOÇÃO DE 0/1\n");
-		for(int i=0;i<=tamanho-2;i++){
-			printf("%i %i %s\n",nodulosAtualizados[i]->contador,nodulosAtualizados[i]->folhas,nodulosAtualizados[i]->palavra);
-		}
-		*/
+		//o vetor de nodulso e apagado e o vetor atualizado é salvo
 		if(this->vetorNodulos != 0){
 			delete this->vetorNodulos;
 		}
@@ -208,101 +180,56 @@ void huffman::gerarArvore(){
 		this->tamanhoVetor--;
 		this->vetorNodulos = nodulosAtualizados;
 
-		//this->imprimeGerador();
-
-		//printf("\nENTRANDO NO INSERT ########################################################################################\n");
+		//O novo nodulo gerado é adicionado no vetor
 		this->inserirElemento(novo);
-		//printf("\nSAINDO DO INSERT ########################################################################################\n\n");
 
-		//printf(" ############ IMPRIMIR GERADOR ###########\n");
-		//this->imprimeGerador();
-		//printf(" #########################################\n");
+		//tamanho do vetor é salvo para se continuar o looping
 		tamanho = this->tamanhoVetor;
-		//printf("%i this->tamanhoVetor++ \n",tamanho);
 	}
-
+	//ao sair do looping apenas havera a raiz da arvore na lista de vetores geradores
+	//ela é salva na raiz da arvore
 	this->raiz = this->vetorNodulos[0];
-
-	//GERAR CODIGOS
-	/*
-  	char code[0];
-  	code[0] = '\0';
-  	this->gerarCodigos(this->raiz,code);
-  	*/
 }
 
-void huffman::imprimeGerador(){
-	printf("%i this->tamanhoVetor \n",this->tamanhoVetor);
-	int tam = this->tamanhoVetor;
-	for(int i=0;i<=tam;i++){
-		printf("%i %i %s\n",this->vetorNodulos[i]->contador,this->vetorNodulos[i]->folhas,this->vetorNodulos[i]->palavra);
-	}
-}
-
+//Função recursiva que percorre a arvore incrementando o codigo ate que encontre uma folha, alem disso salva os codigos num hashing
 void huffman::gerarCodigos(noduloArvore *nod,char *code,myHashing *tabela){
+	//tem como condição de parada um nodulo vazio
 	if(nod != 0){
+		//Caso o nodulo seja uma folha
 		if(nod->folhas == 1){
+			//atribui o codigo gerado ate agora no nodulo
 			nod->code = code;
-			//rintf("%i %i %s %s\n",nod->contador,nod->folhas,nod->palavra,nod->code);
-
+			//acessa o hashing na posicao desejada
 			int chave = int(nod->palavra[0])%tabela->chave;
+			//encontra na lista encadeada a palavra e salva seu codigo
 			nodulo *noduloLista = tabela->hashing[chave]->pesquisa(nod->palavra);
-
-			//printf("%i %s %s\n",noduloLista->contador,noduloLista->palavra,noduloLista->code);
-
 			noduloLista->code = code;
-			//printf("%i %s %s\n",noduloLista->contador,noduloLista->palavra,noduloLista->code);
 			return;
 		}
+		//caso o nodulo nao seja uma folha
+		//determina o tamanho atual do codigo
 		int tamanho = 0;
 		for(int i=0;code[i] != '\0';i++){
 			tamanho++;
 		}
+		//gera novos codigos
 		char *novoCodigoEsq = new char[tamanho+2];
 		char *novoCodigoDir = new char[tamanho+2];
-
+		//copia o inicio dos codigos antigos nos codigos novos
 		for(int i=0;i<tamanho;i++){
 			novoCodigoEsq[i] = code[i];
 			novoCodigoDir[i] = code[i];			
 		}
-
 		tamanho++;
-
+		//Adiciona o valor nas posicoes finais do codigo
 		novoCodigoEsq[tamanho] = '\0';
 		novoCodigoEsq[tamanho-1] = '0';
 
 		novoCodigoDir[tamanho] = '\0';
 		novoCodigoDir[tamanho-1] = '1';
 
+		//chama a funcao pros nodulso filhos, agora com o codigo atualizado
 		gerarCodigos(nod->esq,novoCodigoEsq,tabela);
 		gerarCodigos(nod->dir,novoCodigoDir,tabela);
 	}
 }
-/*
-char* huffman::pesquisaCodigo(noduloArvore *nodulo, char *palavra){
-	if(nodulo != 0){
-		if(nodulo->folhas == 1){
-			printf("EH FOLHA\n");
-			printf("%s %s NODULO\n",nodulo->palavra,nodulo->code);
-			if(nodulo->palavra[0] == palavra[0]){
-				int ultimaLetra = 0;
-				for(int x=0;palavra[x] != '\0' && nodulo->palavra[x] != '\0';x++){
-					printf("%i - %c %c\n",x,nodulo->palavra[x],palavra[x]);
-					if(nodulo->palavra[x] != palavra[x]){
-						break;
-					}
-					ultimaLetra = x+1;
-				}
-				printf("%i - %i %i\n",ultimaLetra,nodulo->palavra[ultimaLetra],palavra[ultimaLetra]);
-				if(nodulo->palavra[ultimaLetra] == '\0' && palavra[ultimaLetra] == '\0'){
-					return nodulo->code;
-				}
-				return 0;
-			}
-		}
-		printf("NAO FOLHA\n");
-		return pesquisaCodigo(nodulo->esq,palavra);
-		return pesquisaCodigo(nodulo->dir,palavra);
-	}
-}
-*/

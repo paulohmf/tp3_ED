@@ -19,19 +19,16 @@ class listaEncadeada{
 		listaEncadeada();
 		~listaEncadeada();
 
-		int size();
-		bool ehVazia();
-		void imprimeLista();//DEPENDE DE EHVAZIA()
+		int size();//Retorna o tamanho da lista
+		bool ehVazia();//Retorna se a lista é vazia
+		void imprimeLista();//Imprime a Lista
+		void esvaziaLista();//Esvazia a lista
 
-		nodulo pop();
+		nodulo pop();//Remove e retorna o primerio nodulo da lista
+		void inserirNodulo(nodulo nod);//Insere um ->NODULO<- no final da lista
 
-		void esvaziaLista();//DEPENDE DE EHVAZIA()
-
-		nodulo* pesquisa(char *palavra);//DEPENDE DE SIZE()
-
-		void insert(char *palavra);//DEPENDE DE PESQUISA() E EHVAZIA()
-
-		void inserirNodulo(nodulo nod);//DEPENDE DE PESQUISA() E EHVAZIA()
+		nodulo* pesquisa(char *palavra);//Pesquisa um palavra na lista
+		void insert(char *palavra);//Insere uma palavra na lista, se ja existir aumentar seu contador
 
 };
 #endif
