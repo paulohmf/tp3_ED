@@ -56,11 +56,12 @@ int main(){
   huffman *arvore = new huffman();
 
   for(int i=0;i<=tabela.range;i++){
+
     //printf("vazio (%i): %i\n",i,tabela.hashing[i]->ehVazia());
     if(!tabela.hashing[i]->ehVazia()){
 
       int tamanhoLista = tabela.hashing[i]->size();
-      //printf("tamanhoLista %i\n",tamanhoLista);
+     // printf("tamanhoLista %i\n",tamanhoLista);
       for(int x=0;x<=tamanhoLista;x++){
         nodulo tirado = tabela.hashing[i]->pop();
         //printf("tirado %s (%i)\n",tirado.palavra,tirado.contador);
@@ -70,6 +71,7 @@ int main(){
         novo->palavra = tirado.palavra;
         novo->contador = tirado.contador;
         novo->code = 0;
+        novo->folhas = 1;
         novo->esq = 0;
         novo->dir = 0;
 
@@ -78,17 +80,20 @@ int main(){
         //printf("INSERIDO\n\n");
 
         //printf("PALAVRA TIRADA %s\n",tirado.palavra);
-        tabela.hashing[i]->insert(tirado.palavra);
+        //tabela.hashing[i]->insert(tirado.palavra);
 
       }
     }
     //tabela.hashing[i]->imprimeLista();
   }
-  printf("IMPRIME GERADOR\n");
+  printf("VETOR GERADOR PRONTO\n");
   arvore->imprimeGerador();
 
 
-
+  printf("GERADOR ARVORE\n");
+  arvore->gerarArvore();
+  printf("ARVORE GERADA\n");
+  
   /* ENTRADAS DO USUARIO
   char op;
   while (scanf(" %c %s", &op, palavra) != EOF) {//voltar com o espaço antes de %c

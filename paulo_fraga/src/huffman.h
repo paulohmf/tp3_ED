@@ -16,6 +16,7 @@ struct noduloArvore{
 	char *palavra;
 	int contador;
 	char *code;
+	int folhas;
 	noduloArvore *esq;
 	noduloArvore *dir;
 };
@@ -37,10 +38,11 @@ class huffman{
 
 		void inserirElemento(noduloArvore *nod);
 
-		//###########
-		void gerarArvore(){};
-
 		void imprimeGerador();
+
+		//###########
+		void gerarArvore();
+
 
 		//nodulo pop();
 
