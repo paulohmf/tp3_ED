@@ -69,6 +69,26 @@ nodulo listaEncadeada::pop(){
 	//O nodulo auxiliar é retornado
 	return retorno;
 }
+//Adiciona um nodulo no fim da lista
+void listaEncadeada::inserirNodulo(nodulo nod){
+	//aloca um novo nodulo
+	nodulo *novo = new nodulo;
+	//salva as informações no nodulo
+	novo->palavra = nod.palavra;
+	novo->contador = nod.contador;
+	novo->code = nod.code;
+
+	//Percorre a lista, com um nodulo auxiliar, ate que chegue ao final da lista
+	nodulo *aux = this->cabeca;
+	for(int i=0;i<=this->size();i++){
+		aux = aux->proximoNodulo;
+	}
+
+	//Salva no novo nodulo no final da lista
+	aux->proximoNodulo = novo;
+	//Incrementa o tamanho da lista
+	this->cabeca->contador++;
+}
 
 //Esvazia a lista, desalocando cada espaço de memoria e depois imprime a lista
 void listaEncadeada::esvaziaLista(){
@@ -162,3 +182,5 @@ void listaEncadeada::insert(char *palavra){
 	return;
 	
 }
+
+

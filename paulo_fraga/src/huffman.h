@@ -3,6 +3,7 @@
 
 #include <cstdio> // em C substituir por #include <stdio.h>
 #include "lista.h"
+#include "hashing.h"
 
 /* apenas para visualização
 struct nodulo{
@@ -26,9 +27,8 @@ class huffman{
 		noduloArvore **vetorNodulos;
 		int tamanhoVetor;
 
-
-		noduloArvore *raiz;
 	public:
+		noduloArvore *raiz;
 
 		huffman();
 		~huffman();
@@ -43,7 +43,10 @@ class huffman{
 		//###########
 		void gerarArvore();
 
+		void gerarCodigos(noduloArvore *no,char *code);
 
+
+		char* pesquisaCodigo(noduloArvore *no,char *palavra);
 		//nodulo pop();
 
 

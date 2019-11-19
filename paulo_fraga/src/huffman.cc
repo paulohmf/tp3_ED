@@ -135,6 +135,37 @@ void huffman::inserirElemento(noduloArvore *nod){
 	//}
 
 }
+int menorPalavra(char *palavra_0,char *palavra_1){
+	if(palavra_0[0] < palavra_1[0]){
+		return 0;
+	}
+	if(palavra_1[0] < palavra_0[0]){
+		return 1;
+	}
+
+	if(palavra_0[0] == palavra_1[0]){
+		//percorre a palavra inteira
+		int ultimaLetra;
+		for(int x=0;palavra_0[x] != '\0' && palavra_1[x] != '\0';x++){
+			//se a letra for menor achamos a posição
+			if(palavra_0[x] < palavra_1[x]){
+				return 0;
+			}
+			if(palavra_1[x] < palavra_0[x]){
+				return 1;
+			}
+			//se for igual continuamos comparando
+			ultimaLetra = x+1;
+		}
+		//se todas as letras ate agora eram iguais e a palavra 
+		if(palavra_0[ultimaLetra] != '\0' && palavra_1[ultimaLetra] == '\0'){
+			return 1;
+		}
+		return 0;
+	}
+	return 0;
+}
+
 void huffman::gerarArvore(){
 
 	int tamanho = this->tamanhoVetor;
@@ -149,12 +180,11 @@ void huffman::gerarArvore(){
 
 		novo->contador = this->vetorNodulos[0]->contador + this->vetorNodulos[1]->contador; 
 		novo->folhas = this->vetorNodulos[0]->folhas + this->vetorNodulos[1]->folhas;
-		//ISSO PODE DAR ERRADO, CHECAR TESTES
-		if(this->vetorNodulos[0]->palavra[0] <= this->vetorNodulos[1]->palavra[0]){
-			novo->palavra = this->vetorNodulos[0]->palavra;
-		}else{
-			novo->palavra = this->vetorNodulos[1]->palavra;
-		}
+
+		//funcao determina a menor palavra
+		int menor = menorPalavra(this->vetorNodulos[0]->palavra,this->vetorNodulos[1]->palavra);
+		novo->palavra = this->vetorNodulos[menor]->palavra;
+
 
 		novo->esq = this->vetorNodulos[0];
 		novo->dir = this->vetorNodulos[1];
@@ -192,6 +222,11 @@ void huffman::gerarArvore(){
 	}
 
 	this->raiz = this->vetorNodulos[0];
+
+	//GERAR CODIGOS
+  	char code[0];
+  	code[0] = '\0';
+  	this->gerarCodigos(this->raiz,code);
 }
 
 void huffman::imprimeGerador(){
@@ -201,3 +236,68 @@ void huffman::imprimeGerador(){
 		printf("%i %i %s\n",this->vetorNodulos[i]->contador,this->vetorNodulos[i]->folhas,this->vetorNodulos[i]->palavra);
 	}
 }
+
+void huffman::gerarCodigos(noduloArvore *nodulo,char *code){
+	if(nodulo != 0){
+		if(nodulo->folhas == 1){
+			nodulo->code = code;
+			printf("%i %i %s %s\n",nodulo->contador,nodulo->folhas,nodulo->palavra,nodulo->code);
+			/*;
+			int chave = int(nodulo->palavra[0])%tabela.chave;
+			listaEncadeada *noduloLista = tabela.myHashing[chave]->pesquisa(nodulo->palavra);
+			noduloLista->code = code;
+			*/
+			return;
+		}
+		int tamanho = 0;
+		for(int i=0;code[i] != '\0';i++){
+			tamanho++;
+		}
+		char *novoCodigoEsq = new char[tamanho+2];
+		char *novoCodigoDir = new char[tamanho+2];
+
+		for(int i=0;i<tamanho;i++){
+			novoCodigoEsq[i] = code[i];
+			novoCodigoDir[i] = code[i];			
+		}
+
+		tamanho++;
+
+		novoCodigoEsq[tamanho] = '\0';
+		novoCodigoEsq[tamanho-1] = '0';
+
+		novoCodigoDir[tamanho] = '\0';
+		novoCodigoDir[tamanho-1] = '1';
+
+		gerarCodigos(nodulo->esq,novoCodigoEsq);
+		gerarCodigos(nodulo->dir,novoCodigoDir);
+	}
+}
+/*
+char* huffman::pesquisaCodigo(noduloArvore *nodulo, char *palavra){
+	if(nodulo != 0){
+		if(nodulo->folhas == 1){
+			printf("EH FOLHA\n");
+			printf("%s %s NODULO\n",nodulo->palavra,nodulo->code);
+			if(nodulo->palavra[0] == palavra[0]){
+				int ultimaLetra = 0;
+				for(int x=0;palavra[x] != '\0' && nodulo->palavra[x] != '\0';x++){
+					printf("%i - %c %c\n",x,nodulo->palavra[x],palavra[x]);
+					if(nodulo->palavra[x] != palavra[x]){
+						break;
+					}
+					ultimaLetra = x+1;
+				}
+				printf("%i - %i %i\n",ultimaLetra,nodulo->palavra[ultimaLetra],palavra[ultimaLetra]);
+				if(nodulo->palavra[ultimaLetra] == '\0' && palavra[ultimaLetra] == '\0'){
+					return nodulo->code;
+				}
+				return 0;
+			}
+		}
+		printf("NAO FOLHA\n");
+		return pesquisaCodigo(nodulo->esq,palavra);
+		return pesquisaCodigo(nodulo->dir,palavra);
+	}
+}
+*/

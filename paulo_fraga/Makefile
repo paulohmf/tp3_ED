@@ -2,8 +2,12 @@ CC=g++
 CFLAGS=-Wall -Wextra -g -std=c++11
 EXEC=./tp3
 
-${EXEC}: src/main.cc lista.o huffman.o
-	${CC} ${CFLAGS} src/main.cc lista.o huffman.o -o ${EXEC}
+${EXEC}: src/main.cc lista.o hashing.o huffman.o 
+	${CC} ${CFLAGS} src/main.cc hashing.o lista.o huffman.o -o ${EXEC}
+
+
+hashing.o: src/hashing.cc
+	$(CC) $(CFLAGS) -c src/hashing.cc -o hashing.o
 
 lista.o: src/lista.cc
 	$(CC) $(CFLAGS) -c src/lista.cc -o lista.o

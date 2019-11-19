@@ -130,3 +130,70 @@ int main(){
   return 0;
 }
 */
+
+
+
+/* MAIN TEST FUNCAO DE INSERÇÃO
+int main(){
+  huffman *arvore = new huffman();
+
+  //CRIANDO UM NODULO A MAO
+  noduloArvore *nod = new noduloArvore;
+  nod->contador = 2;
+  char palavra[10];
+  palavra[0] = 'c';
+  palavra[1] = 'b';
+
+  palavra[2] = '\0';
+  nod->palavra = palavra;
+  nod->code = 0;
+  nod->esq = 0;
+  nod->dir = 0;  
+
+  printf("INSERIR 1\n");
+  arvore->inserirElemento(nod);
+  printf("CABOU 1\n");
+
+  //CRIANDO UM NODULO A MAO
+  noduloArvore *nod1 = new noduloArvore;
+  nod1->contador = 2;
+  char palavra1[10];
+  palavra1[0] = 'c';
+  palavra1[1] = 'a';
+
+  palavra1[2] = '\0';
+
+  nod1->palavra = palavra1;
+  nod1->code = 0;
+  nod->esq = 0;
+  nod->dir = 0;  
+
+  printf("INSERIR 2\n");
+
+  arvore->inserirElemento(nod1);
+  printf("CABOU 2\n");
+
+  //CRIANDO UM NODULO A MAO
+  noduloArvore *nod2 = new noduloArvore;
+  nod2->contador = 1;
+  char palavra2[10];
+  palavra2[0] = 'a';
+  palavra2[1] = 'c';
+
+  palavra2[2] = '\0';
+
+  nod2->palavra = palavra2;
+  nod2->code = 0;
+  nod->esq = 0;
+  nod->dir = 0;  
+
+  printf("INSERIR 3\n");
+
+  arvore->inserirElemento(nod2);
+  printf("CABOU 3\n");
+
+
+  delete arvore;
+  return 0;
+}
+*/

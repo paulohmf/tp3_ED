@@ -31,5 +31,7 @@ class listaEncadeada{
 
 		void insert(char *palavra);//DEPENDE DE PESQUISA() E EHVAZIA()
 
+		void inserirNodulo(nodulo nod);//DEPENDE DE PESQUISA() E EHVAZIA()
+
 };
 #endif

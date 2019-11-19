@@ -17,8 +17,8 @@ int main(){
     tabela.hashing[i] = lista;
   }
 
+  //Recebe o tamanho da entrada
   long int numeroPalavras;
-
   scanf("%li ",&numeroPalavras);//OLHO NESSE SCANF
 
   long int palavrasAtualmente = 0;
@@ -26,12 +26,13 @@ int main(){
   char palavra[64];
   int posicao = 0;
   char letra;
+  //Recebe as entradas
   while(palavrasAtualmente < numeroPalavras){
     scanf("%c",&letra);
     if(letra == ' ' || letra == '\n'){
       palavra[posicao] = '\0';
 
-      //Insere no hashing
+      //Insere a entrada no hashing
       int chave = int(palavra[0])%tabela.chave;
       tabela.hashing[chave]->insert(palavra);
 
@@ -43,7 +44,6 @@ int main(){
     }
   }
   //IMPRIME O HASHING
-
   for(int i=0;i<=tabela.range;i++){
     if(!tabela.hashing[i]->ehVazia()){
       printf("%i---- \n",i);
@@ -51,10 +51,11 @@ int main(){
    tabela.hashing[i]->imprimeLista();
   }
 
-  printf("\nHUFFMAN\n");
   //inicio do huffmann
+  printf("\nHUFFMAN\n\n");
   huffman *arvore = new huffman();
 
+  //Carrega o vetor gerador da arvore de Huffman (a floresta de arvores unicas)
   for(int i=0;i<=tabela.range;i++){
 
     //printf("vazio (%i): %i\n",i,tabela.hashing[i]->ehVazia());
@@ -64,6 +65,7 @@ int main(){
      // printf("tamanhoLista %i\n",tamanhoLista);
       for(int x=0;x<=tamanhoLista;x++){
         nodulo tirado = tabela.hashing[i]->pop();
+        tabela.hashing[i]->inserirNodulo(tirado);
         //printf("tirado %s (%i)\n",tirado.palavra,tirado.contador);
 
         noduloArvore *novo = new noduloArvore;
@@ -83,17 +85,56 @@ int main(){
         //tabela.hashing[i]->insert(tirado.palavra);
 
       }
+      //printf("IMPRIME LISTA\n");
+      //tabela.hashing[i]->imprimeLista();
     }
     //tabela.hashing[i]->imprimeLista();
   }
   printf("VETOR GERADOR PRONTO\n");
-  arvore->imprimeGerador();
+  //arvore->imprimeGerador();
 
-
-  printf("GERADOR ARVORE\n");
+  //Gera a arvore de Huffman
+  printf("GERADOR ARVORE COM OS CODIGOS\n");
   arvore->gerarArvore();
   printf("ARVORE GERADA\n");
-  
+
+  /*
+  //GERAR CODIGOS
+  char code[0];
+  code[0] = '\0';
+  this->gerarCodigos(this->raiz,code,tabela);
+  */
+
+  /*ERRO POSSIVEL
+  //SALVAR CODIGOS NO HASHING
+  for(int i=0;i<=tabela.range;i++){
+    if(!tabela.hashing[i]->ehVazia()){
+      int tamanhoLista = tabela.hashing[i]->size();
+      for(int x=0;x<=tamanhoLista;x++){
+        nodulo tirado = tabela.hashing[i]->pop();
+
+        printf("######################### PESQUISA N: () ####################\n");
+        printf("%i : %s/  CODE : %s\n",tirado.contador,tirado.palavra,tirado.code);
+
+        tirado.code = arvore->pesquisaCodigo(arvore->raiz,tirado.palavra);
+        printf("CODE : %s\n",tirado.code);
+
+        tabela.hashing[i]->inserirNodulo(tirado);
+        printf("IMPRIME LISTA DO HASHING\n");
+        tabela.hashing[i]->imprimeLista();
+      }
+    }
+  }
+  */
+  /*
+  //IMPRIME O HASHING
+  for(int i=0;i<=tabela.range;i++){
+    if(!tabela.hashing[i]->ehVazia()){
+      printf("%i---- \n",i);
+    }
+   tabela.hashing[i]->imprimeLista();
+  }
+  */
   /* ENTRADAS DO USUARIO
   char op;
   while (scanf(" %c %s", &op, palavra) != EOF) {//voltar com o espaço antes de %c
@@ -106,76 +147,12 @@ int main(){
   }
   */
 
-  //Deleta as listasa encadeadas da tabela Hashing
+  //Deleta a arvore
+  delete arvore;
+  //Deleta as listas encadeadas da tabela Hashing
   for(int i=tabela.range;i>=0;i--){
     delete tabela.hashing[i];
   }
   return 0;
 
 }
-
-
-/* MAIN TEST FUNCAO DE INSERÇÃO
-int main(){
-  huffman *arvore = new huffman();
-
-  //CRIANDO UM NODULO A MAO
-  noduloArvore *nod = new noduloArvore;
-  nod->contador = 2;
-  char palavra[10];
-  palavra[0] = 'c';
-  palavra[1] = 'b';
-
-  palavra[2] = '\0';
-  nod->palavra = palavra;
-  nod->code = 0;
-  nod->esq = 0;
-  nod->dir = 0;  
-
-  printf("INSERIR 1\n");
-  arvore->inserirElemento(nod);
-  printf("CABOU 1\n");
-
-  //CRIANDO UM NODULO A MAO
-  noduloArvore *nod1 = new noduloArvore;
-  nod1->contador = 2;
-  char palavra1[10];
-  palavra1[0] = 'c';
-  palavra1[1] = 'a';
-
-  palavra1[2] = '\0';
-
-  nod1->palavra = palavra1;
-  nod1->code = 0;
-  nod->esq = 0;
-  nod->dir = 0;  
-
-  printf("INSERIR 2\n");
-
-  arvore->inserirElemento(nod1);
-  printf("CABOU 2\n");
-
-  //CRIANDO UM NODULO A MAO
-  noduloArvore *nod2 = new noduloArvore;
-  nod2->contador = 1;
-  char palavra2[10];
-  palavra2[0] = 'a';
-  palavra2[1] = 'c';
-
-  palavra2[2] = '\0';
-
-  nod2->palavra = palavra2;
-  nod2->code = 0;
-  nod->esq = 0;
-  nod->dir = 0;  
-
-  printf("INSERIR 3\n");
-
-  arvore->inserirElemento(nod2);
-  printf("CABOU 3\n");
-
-
-  delete arvore;
-  return 0;
-}
-*/
