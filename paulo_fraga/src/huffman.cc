@@ -36,7 +36,7 @@ void huffman::inserirElemento(noduloArvore *nod){
 		//printf("%i nod->contador < %i this->vetorNodulos[i]->contador \n",nod->contador,this->vetorNodulos[i]->contador);
 		//Caso o contador seja maior do que o do nodulo, encontramos a posicao
 		if(nod->contador < this->vetorNodulos[i]->contador){
-			printf("SIM %i i\n",i);
+			//printf("SIM %i i\n",i);
 			nodulosAtualizados[i] = nod;
 			posicao = i;
 			novoNoduloInserido = true;
@@ -45,43 +45,54 @@ void huffman::inserirElemento(noduloArvore *nod){
 		//caso o contador seja igual, temos que checar pela palavra
 		if(nod->contador == this->vetorNodulos[i]->contador){
 			//printf("SIM\n");
-			//printf("%c nod->palavra[0] < %c this->vetorNodulos[i]->palavra[0] \n",nod->palavra[0], this->vetorNodulos[i]->palavra[0]);
-			//se a primeira letra da palavra for menor que a primeira letra comparada encontramos a posicao a posicao
-			if(nod->palavra[0] < this->vetorNodulos[i]->palavra[0]){
-				//printf("SIM %i i\n",i);
+
+			//se o contador for igual, primerio eu olho o numero de folhas
+			if(nod->folhas == this->vetorNodulos[i]->folhas){
+
+				//printf("%c nod->palavra[0] < %c this->vetorNodulos[i]->palavra[0] \n",nod->palavra[0], this->vetorNodulos[i]->palavra[0]);
+				//se a primeira letra da palavra for menor que a primeira letra comparada encontramos a posicao a posicao
+				if(nod->palavra[0] < this->vetorNodulos[i]->palavra[0]){
+					//printf("SIM %i i\n",i);
+					nodulosAtualizados[i] = nod;
+					posicao = i;
+					novoNoduloInserido = true;
+					break;
+				}
+				//se a primeira letra for igual, temos que pecorrer a palavra inteira para encontrar a posicao certa
+				//printf("%c nod->palavra[0] < %c this->vetorNodulos[i]->palavra[0] \n",nod->palavra[0], this->vetorNodulos[i]->palavra[0]);
+				if(nod->palavra[0] == this->vetorNodulos[i]->palavra[0]){
+					//printf("SIM\n");
+					//percorre a palavra inteira
+					int ultimaLetra;
+					for(int x=0;nod->palavra[x] != '\0' && this->vetorNodulos[i]->palavra[x] != '\0';x++){
+						//se a letra for menor achamos a posição
+						if(nod->palavra[x] < this->vetorNodulos[i]->palavra[x]){
+							nodulosAtualizados[i] = nod;
+							posicao = i;
+							novoNoduloInserido = true;
+							break;
+						}
+						//se a letra for paior saimos do loop
+						if(nod->palavra[x] > this->vetorNodulos[i]->palavra[x]){
+							//SAI
+							break;
+						}
+						//se for igual continuamos comparando
+						ultimaLetra = x+1;
+					}
+					//se todas as letras ate agora eram iguais e a palavra 
+					if(nod->palavra[ultimaLetra] == '\0' && this->vetorNodulos[i]->palavra[ultimaLetra] != '\0'){
+						nodulosAtualizados[i] = nod;
+						posicao = i;
+						novoNoduloInserido = true;
+					}
+				}
+			}
+			if(nod->folhas < this->vetorNodulos[i]->folhas){
 				nodulosAtualizados[i] = nod;
 				posicao = i;
 				novoNoduloInserido = true;
 				break;
-			}
-			//se a primeira letra for igual, temos que pecorrer a palavra inteira para encontrar a posicao certa
-			//printf("%c nod->palavra[0] < %c this->vetorNodulos[i]->palavra[0] \n",nod->palavra[0], this->vetorNodulos[i]->palavra[0]);
-			if(nod->palavra[0] == this->vetorNodulos[i]->palavra[0]){
-				//printf("SIM\n");
-				//percorre a palavra inteira
-				int ultimaLetra;
-				for(int x=0;nod->palavra[x] != '\0' && this->vetorNodulos[i]->palavra[x] != '\0';x++){
-					//se a letra for menor achamos a posição
-					if(nod->palavra[x] < this->vetorNodulos[i]->palavra[x]){
-						nodulosAtualizados[i] = nod;
-						posicao = i;
-						novoNoduloInserido = true;
-						break;
-					}
-					//se a letra for paior saimos do loop
-					if(nod->palavra[x] > this->vetorNodulos[i]->palavra[x]){
-						//SAI
-						break;
-					}
-					//se for igual continuamos comparando
-					ultimaLetra = x+1;
-				}
-				//se todas as letras ate agora eram iguais e a palavra 
-				if(nod->palavra[ultimaLetra] == '\0' && this->vetorNodulos[i]->palavra[ultimaLetra] != '\0'){
-					nodulosAtualizados[i] = nod;
-					posicao = i;
-					novoNoduloInserido = true;
-				}
 			}
 		}
 		if(novoNoduloInserido){
@@ -128,21 +139,27 @@ void huffman::gerarArvore(){
 
 	int tamanho = this->tamanhoVetor;
 
-	printf("%i this->tamanhoVetor++ \n",tamanho);
+	//printf("%i this->tamanhoVetor++ \n",tamanho);
 
 	while(tamanho > 0){
 		noduloArvore *novo = new noduloArvore;
 
-		printf("%i %i %s - %x\n",this->vetorNodulos[0]->contador,this->vetorNodulos[0]->folhas,this->vetorNodulos[0]->palavra,this->vetorNodulos[0]);
-		printf("%i %i %s - %x\n",this->vetorNodulos[1]->contador,this->vetorNodulos[1]->folhas,this->vetorNodulos[1]->palavra,this->vetorNodulos[1]);
+		//printf("%i %i %s - %x\n",this->vetorNodulos[0]->contador,this->vetorNodulos[0]->folhas,this->vetorNodulos[0]->palavra,this->vetorNodulos[0]);
+		//printf("%i %i %s - %x\n",this->vetorNodulos[1]->contador,this->vetorNodulos[1]->folhas,this->vetorNodulos[1]->palavra,this->vetorNodulos[1]);
 
 		novo->contador = this->vetorNodulos[0]->contador + this->vetorNodulos[1]->contador; 
-		novo->folhas = this->vetorNodulos[0]->folhas + this->vetorNodulos[1]->folhas; 
-		novo->palavra = this->vetorNodulos[0]->palavra;
+		novo->folhas = this->vetorNodulos[0]->folhas + this->vetorNodulos[1]->folhas;
+		//ISSO PODE DAR ERRADO, CHECAR TESTES
+		if(this->vetorNodulos[0]->palavra[0] <= this->vetorNodulos[1]->palavra[0]){
+			novo->palavra = this->vetorNodulos[0]->palavra;
+		}else{
+			novo->palavra = this->vetorNodulos[1]->palavra;
+		}
+
 		novo->esq = this->vetorNodulos[0];
 		novo->dir = this->vetorNodulos[1];
 
-		printf("NOVO\n%i %i %s\n%x %x\n",novo->contador,novo->folhas,novo->palavra,novo->esq,novo->dir);
+		//printf("NOVO\n%i %i %s\n%x %x\n",novo->contador,novo->folhas,novo->palavra,novo->esq,novo->dir);
 
 		noduloArvore **nodulosAtualizados = new noduloArvore*[tamanho];
 		for(int i=0;i<=tamanho-2;i++){
@@ -161,17 +178,17 @@ void huffman::gerarArvore(){
 		this->tamanhoVetor--;
 		this->vetorNodulos = nodulosAtualizados;
 
-		this->imprimeGerador();
+		//this->imprimeGerador();
 
-		printf("\nENTRANDO NO INSERT ########################################################################################\n");
+		//printf("\nENTRANDO NO INSERT ########################################################################################\n");
 		this->inserirElemento(novo);
-		printf("\nSAINDO DO INSERT ########################################################################################\n\n");
+		//printf("\nSAINDO DO INSERT ########################################################################################\n\n");
 
-		printf("IMPRIMIR GERADOR\n");
-		this->imprimeGerador();
-
+		//printf(" ############ IMPRIMIR GERADOR ###########\n");
+		//this->imprimeGerador();
+		//printf(" #########################################\n");
 		tamanho = this->tamanhoVetor;
-		printf("%i this->tamanhoVetor++ \n",tamanho);
+		//printf("%i this->tamanhoVetor++ \n",tamanho);
 	}
 
 	this->raiz = this->vetorNodulos[0];
