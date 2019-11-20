@@ -26,7 +26,7 @@ class huffman{
 		huffman();
 		~huffman();
 
-		void esvaziaLista(){};//TO-DO
+		void esvaziaArvore(noduloArvore *raiz);//TO-DO
 
 		void inserirElemento(noduloArvore *nod);//Insere um elemento no vetor gerador
 		void imprimeGerador();//Imprime o vetor gerador
