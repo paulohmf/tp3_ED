@@ -96,7 +96,7 @@ int main(){
   }
 
   //Deleta a arvore
-  delete arvore;
+  //delete arvore;
   //Deleta as listas encadeadas da tabela Hashing
   for(int i=tabela->range;i>=0;i--){
     delete tabela->hashing[i];

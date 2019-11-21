@@ -16,8 +16,6 @@ huffman::huffman(){
 
 void huffman::esvaziaArvore(noduloArvore *no){
 	if(no != 0){
-		delete no->palavra;
-		delete no->code;
 		esvaziaArvore(no->esq);
 		esvaziaArvore(no->dir);
 		delete no;
