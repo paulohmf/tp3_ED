@@ -4,6 +4,7 @@
 #include "hashing.h"
 
 int main(){
+  //################# Inicialização do hashing ##################################
   myHashing *tabela = new myHashing;
 
   //Incializa as listas encadeadas da tabela Hashing
@@ -11,7 +12,10 @@ int main(){
     listaEncadeada *lista = new listaEncadeada();
     tabela->hashing[i] = lista;
   }
+  //################ Hashing inicializado #######################################
 
+
+  //################ Recebendo as 'n' palavras ##################################
   //Recebe o tamanho da entrada
   long int numeroPalavras;
   scanf("%li ",&numeroPalavras);
@@ -39,8 +43,10 @@ int main(){
       posicao++;
     }
   }
+  //############### Palavras recebidas ##########################################
 
-  //inicio do huffmann
+
+  //############### Inicio do Huffman ###########################################
   huffman *arvore = new huffman();
 
   //Carrega o vetor gerador da arvore de Huffman (a floresta de arvores unicas)
@@ -69,7 +75,6 @@ int main(){
       }
     }
   }
-
   //Gera a arvore de Huffman
   arvore->gerarArvore();
 
@@ -77,8 +82,10 @@ int main(){
   char code[0];
   code[0] = '\0';
   arvore->gerarCodigos(arvore->raiz,code,tabela);//Receve a raiz da arvore, um code zerado "", e o hashing em que os codigos serao salvos
+  //############# Fim do Huffman ################################################
 
-  //ENTRADAS DO USUARIO
+
+  //############# ENTRADAS DO USUARIO e saidas ##################################
   char op;
   while (scanf(" %c %s", &op, palavra) != EOF) {
     if (op == 'q'){
@@ -94,15 +101,21 @@ int main(){
       printf("%s\n",resposta->code);
     } 
   }
+  //############# FIM DAS ENTRADAS e saidas #####################################
 
+
+  //############# Free de tudo que foi gerado ###################################
   //Deleta a arvore
-  //delete arvore;
+  delete arvore;//o destrutor tem funcao que desacola cada no da arvore e seu conteudo
+
   //Deleta as listas encadeadas da tabela Hashing
   for(int i=tabela->range;i>=0;i--){
-    delete tabela->hashing[i];
+    delete tabela->hashing[i]; //o destrutor tem funcao que desacola cada nodulo e seu conteudo
   }
+
   //Deleta o Hashing
   delete tabela;
+  //############# fim do free ###################################################
   return 0;
 
 }

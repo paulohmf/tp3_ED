@@ -13,9 +13,15 @@ huffman::huffman(){
 	this->tamanhoVetor = -1;
 
 }
-
+//Função recursiva que recebe um no e esvazia o no e todos os seus filhos
 void huffman::esvaziaArvore(noduloArvore *no){
 	if(no != 0){
+		if(no->palavra != 0){
+			delete no->palavra;
+		}
+		if(no->code != 0){
+			delete no->code;				
+		}
 		esvaziaArvore(no->esq);
 		esvaziaArvore(no->dir);
 		delete no;
@@ -58,10 +64,18 @@ void huffman::inserirElemento(noduloArvore *nod){
 			novoNoduloInserido = true;
 		}
 
-		//caso o contador seja igual, temos que checar pela palavra
+		//caso o contador seja igual, temos que checar pelo numero de folhas
 		if(nod->contador == this->vetorNodulos[i]->contador){
 
 			//se o contador for igual, primerio eu olho o numero de folhas
+			//se as folhas passarem as do vetor, encontrei a posicao
+			if(nod->folhas < this->vetorNodulos[i]->folhas){
+				nodulosAtualizados[i] = nod;
+				posicao = i;
+				novoNoduloInserido = true;
+				break;
+			}
+			//se as folhas forem iguais, preciso comparar as palavras
 			if(nod->folhas == this->vetorNodulos[i]->folhas){
 
 				//se a primeira letra da palavra for menor que a primeira letra comparada encontramos a posicao a posicao
@@ -84,14 +98,15 @@ void huffman::inserirElemento(noduloArvore *nod){
 							novoNoduloInserido = true;
 							break;
 						}
-						//se a letra for paior saimos do loop
+						//se a letra for maior saimos do loop e seguimos para o proximo elemento
 						if(nod->palavra[x] > this->vetorNodulos[i]->palavra[x]){
 							break;
 						}
 						//se for igual continuamos comparando
 						ultimaLetra = x+1;
 					}
-					//se todas as letras ate agora eram iguais e a palavra 
+					//se todas as letras ate agora eram iguais e a palavra acabou, mas a palavra do nodulo ainda nao
+					//achamos a posicao
 					if(nod->palavra[ultimaLetra] == '\0' && this->vetorNodulos[i]->palavra[ultimaLetra] != '\0'){
 						nodulosAtualizados[i] = nod;
 						posicao = i;
@@ -99,21 +114,16 @@ void huffman::inserirElemento(noduloArvore *nod){
 					}
 				}
 			}
-			//se as folhas passarem as do vetor, encontrei a posicao
-			if(nod->folhas < this->vetorNodulos[i]->folhas){
-				nodulosAtualizados[i] = nod;
-				posicao = i;
-				novoNoduloInserido = true;
-				break;
-			}
 		}
+		//caso encontramos a posicao, saimos da iteracao
 		if(novoNoduloInserido){
 			break;
 		}
 		//caso o nodulo nao tenha encontrado sua posicao, o novo vetor e atualizado com o valor do antigo
 		nodulosAtualizados[i] = this->vetorNodulos[i];
 	}
-	//Caso todos os elementos tenham sido percorridos a posicao do nodulo eh no final do novo vetor
+	//Saimos da iteração
+	//Caso todos os elementos tenham sido percorridos e a posicao nao encontrada a posicao do nodulo eh no final do novo vetor
 	if(!novoNoduloInserido){
 		nodulosAtualizados[tam] = nod;
 		posicao = tam;
@@ -129,7 +139,7 @@ void huffman::inserirElemento(noduloArvore *nod){
 	if(this->vetorNodulos != 0){
 		delete this->vetorNodulos;
 	}
-	//salva o vetor novo
+	//salva o vetor atualizado
 	this->vetorNodulos = nodulosAtualizados;
 }
 //Essa funcao meramente determina se a palavra 0 é menor que a palavra 1 (usada para gerar a arvore)
@@ -183,7 +193,7 @@ void huffman::gerarArvore(){
 		for(int i=0;i<=tamanho-2;i++){
 			nodulosAtualizados[i] = this->vetorNodulos[i+2];
 		}
-		//o vetor de nodulso e apagado e o vetor atualizado é salvo
+		//o vetor de nodulos e apagado e o vetor atualizado é salvo
 		if(this->vetorNodulos != 0){
 			delete this->vetorNodulos;
 		}
@@ -203,6 +213,7 @@ void huffman::gerarArvore(){
 }
 
 //Função recursiva que percorre a arvore incrementando o codigo ate que encontre uma folha, alem disso salva os codigos num hashing
+//a funcao inicialmente recebe um vetor de caracteres com code[0] = '\0'
 void huffman::gerarCodigos(noduloArvore *nod,char *code,myHashing *tabela){
 	//tem como condição de parada um nodulo vazio
 	if(nod != 0){
@@ -239,7 +250,7 @@ void huffman::gerarCodigos(noduloArvore *nod,char *code,myHashing *tabela){
 		novoCodigoDir[tamanho] = '\0';
 		novoCodigoDir[tamanho-1] = '1';
 
-		//chama a funcao pros nodulso filhos, agora com o codigo atualizado
+		//chama a funcao para os nodulus filhos, agora com o codigo atualizado
 		gerarCodigos(nod->esq,novoCodigoEsq,tabela);
 		gerarCodigos(nod->dir,novoCodigoDir,tabela);
 	}

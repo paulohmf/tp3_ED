@@ -101,8 +101,13 @@ void listaEncadeada::esvaziaLista(){
 		for(int i=0; i<=this->cabeca->contador;i++){
 
 			this->cabeca->proximoNodulo = NoduloAtual->proximoNodulo;
-			delete NoduloAtual->palavra;
-			delete NoduloAtual->code;
+
+			if(NoduloAtual->palavra != 0){
+				delete NoduloAtual->palavra;
+			}
+			if(NoduloAtual->code != 0){
+				delete NoduloAtual->code;				
+			}
 			delete NoduloAtual;
 
 			NoduloAtual = this->cabeca->proximoNodulo;

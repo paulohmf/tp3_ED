@@ -22,7 +22,7 @@ class listaEncadeada{
 		int size();//Retorna o tamanho da lista
 		bool ehVazia();//Retorna se a lista é vazia
 		void imprimeLista();//Imprime a Lista
-		void esvaziaLista();//Esvazia a lista
+		void esvaziaLista();//Esvazia a lista (chamado pelo destrutor)
 
 		nodulo pop();//Remove e retorna o primerio nodulo da lista
 		void inserirNodulo(nodulo nod);//Insere um ->NODULO<- no final da lista

@@ -26,13 +26,13 @@ class huffman{
 		huffman();
 		~huffman();
 
-		void esvaziaArvore(noduloArvore *raiz);//TO-DO
+		void esvaziaArvore(noduloArvore *raiz);//Remove todos os nos de uma arvore ou subarvore (usado no destrutor)
 
 		void inserirElemento(noduloArvore *nod);//Insere um elemento no vetor gerador
 		void imprimeGerador();//Imprime o vetor gerador
 
 
 		void gerarArvore();//Gera a arvore a partir do vetor de nodulos
-		void gerarCodigos(noduloArvore *no,char *code,myHashing *tabela);//Gera os codigos na arvores esalva em um hashing
+		void gerarCodigos(noduloArvore *no,char *code,myHashing *tabela);//Gera os codigos na arvores e salva em um hashing
 };
 #endif
