@@ -105,16 +105,17 @@ int main(){
 
 
   //############# Free de tudo que foi gerado ###################################
-  //Deleta a arvore
-  delete arvore;//o destrutor tem funcao que desacola cada no da arvore e seu conteudo
-
   //Deleta as listas encadeadas da tabela Hashing
   for(int i=tabela->range;i>=0;i--){
     delete tabela->hashing[i]; //o destrutor tem funcao que desacola cada nodulo e seu conteudo
   }
 
   //Deleta o Hashing
-  delete tabela;
+  delete tabela;//Os ponteiros para palavra e code  da lista sao os mesmo que estao na arvore por isso eles sao liberados apenas pelo destrutor da lista 
+
+  //Deleta a arvore
+  delete arvore;//o destrutor tem funcao que desacola cada no da arvore e seu conteudo
+
   //############# fim do free ###################################################
   return 0;
 

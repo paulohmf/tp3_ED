@@ -16,22 +16,16 @@ huffman::huffman(){
 //Função recursiva que recebe um no e esvazia o no e todos os seus filhos
 void huffman::esvaziaArvore(noduloArvore *no){
 	if(no != 0){
-		if(no->palavra != 0){
-			delete no->palavra;
-		}
-		if(no->code != 0){
-			delete no->code;				
-		}
 		esvaziaArvore(no->esq);
 		esvaziaArvore(no->dir);
 		delete no;
+		//Os ponteiros para palavra e code da lista sao os mesmo que estao na arvore por isso eles sao liberados apenas pelo destrutor da lista 
 	}
 
 }
 
 huffman::~huffman(){
 	this->esvaziaArvore(this->raiz);
-	delete this->raiz;
 	delete this->vetorNodulos;
 }
 

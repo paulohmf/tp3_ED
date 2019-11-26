@@ -102,12 +102,10 @@ void listaEncadeada::esvaziaLista(){
 
 			this->cabeca->proximoNodulo = NoduloAtual->proximoNodulo;
 
-			if(NoduloAtual->palavra != 0){
-				delete NoduloAtual->palavra;
-			}
-			if(NoduloAtual->code != 0){
-				delete NoduloAtual->code;				
-			}
+
+			//Os ponteiros para palavra e code  da lista sao os mesmo que estao na arvore por isso eles sao liberados apenas pelo destrutor da lista 
+			delete NoduloAtual->palavra;
+			delete NoduloAtual->code;
 			delete NoduloAtual;
 
 			NoduloAtual = this->cabeca->proximoNodulo;
